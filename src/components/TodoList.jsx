@@ -4,13 +4,14 @@ import TodoItem from './TodoItem';
 
 const TodoList = () => {
     const {todos} = useSelector(state => state.todos)
-    console.log(todos);
+    // console.log(todos);
     
     return  (
         <ol className="todo-item-ol">
-            {todos.map((todo) => (
-                <TodoItem key={todo.id} {...todo} />
-            ))}
+            {   todos.length > 0 && 
+                todos.map(todo => (
+                <TodoItem key={todo.id} {...todo} />))
+            }
         </ol>
     );;
 };
