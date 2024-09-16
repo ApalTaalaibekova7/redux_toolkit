@@ -1,0 +1,48 @@
+.todo-item-ol {
+    background-color: rgb(250, 245, 238);
+    width: 40%;
+    margin: 0 auto;
+    margin-block-start: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    list-style: decimal inside;  
+    padding-left: 20px;
+    color: red;
+}
+
+/* Элементы списка */
+.todo-item {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+/* Чекбокс */
+.todo-item input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+/* Текст задачи */
+.todo-item .title {
+    flex-grow: 1;
+    color: #000;
+}
+
+/* Стиль для выполненных задач */
+.todo-item.completed .title {
+    text-decoration: line-through;
+    color: #888;
+}
+
+/* Кнопка удаления */
+.todo-item .remove {
+    cursor: pointer;
+    color: red;
+    margin-left: 10px;
+    font-size: 18px;
+}
+
+Последний элемент без линии
+.todo-item:last-child {
+    border-bottom: none;
+}

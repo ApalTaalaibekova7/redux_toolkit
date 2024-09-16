@@ -18,9 +18,23 @@ export const fetchTodosList = createAsyncThunk(
         }
     }
 )
-
+// Удаление из сервера
 export const fetchByRemoveTodo = createAsyncThunk (
-    'todos'
+    'todos/fetchByRemoveTodo',
+    async (id, {rejectWithValue, dispatch}) => {
+        try {
+            const res = await axios.delete(`https://jsonplaceholder.typicode.com/todos/${id}`)
+            // console.log(res);
+            if(res.status !== 200) {
+                throw new Error('Can\'t delete task! Server error')
+            }
+
+            dispatch(removeTodo({ id }))
+
+        } catch (error) {
+            return rejectWithValue(error.message)
+        }
+    }
 )
 
 const todoSlice = createSlice({
