@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
+// Получение списка задач ///////////////
 export const fetchTodosList = createAsyncThunk(
     'todos/fetchTodosList',
     async (_, { rejectWithValue }) => {
@@ -18,7 +19,7 @@ export const fetchTodosList = createAsyncThunk(
         }
     }
 )
-//////////////// Удаление из сервера ////////////////
+////////////////  Удаление задачи с сервера ////////////////
 export const fetchByRemoveTodo = createAsyncThunk(
     'todos/fetchByRemoveTodo',
     async (id, { rejectWithValue, dispatch }) => {
@@ -36,8 +37,8 @@ export const fetchByRemoveTodo = createAsyncThunk(
         }
     }
 )
-//////////////// Удаление из сервера ////////////////
 
+// Переключение статуса задачи //////////////////
 export const fetchByToggleStatus = createAsyncThunk(
     'todos/fetchByToggleStatus',
     async (id, { rejectWithValue, dispatch, getState }) => {
@@ -49,7 +50,7 @@ export const fetchByToggleStatus = createAsyncThunk(
                 throw new Error('Server error')
             }
 
-
+// Длинный вариант:
             // const res = await fetch(`https://jsonplaceholder.typicode.com/todos/${id}`, {
             //     method: 'PATCH', 
             //     headers: {
@@ -68,11 +69,12 @@ export const fetchByToggleStatus = createAsyncThunk(
 
             dispatch(toggleComplete({ id }))
         } catch (error) {
-            return rejectWithValue(error)
+            return rejectWithValue(error.message)
         }
     }
 )
 
+// Добавление новой задачи на сервер ////////////
 export const fetchByAddNewTodo = createAsyncThunk(
     'todos/fetchByAddNewTodo',
     async (text, { rejectWithValue, dispatch }) => {
@@ -94,7 +96,6 @@ export const fetchByAddNewTodo = createAsyncThunk(
         }
     }
 )
-
 
 const todoSlice = createSlice({
     name: 'todos',
@@ -120,6 +121,7 @@ const todoSlice = createSlice({
             state.status = 'loading';
             state.error = null;
         })
+         // Получение списка задач //////////////
             .addCase(fetchTodosList.fulfilled, (state, action) => {
                 state.status = 'resolved';
                 state.todos = action.payload;
@@ -128,6 +130,8 @@ const todoSlice = createSlice({
                 state.status = 'rejected';
                 state.error = action.payload;
             })
+
+               // Удаление задачи
             .addCase(fetchByRemoveTodo.pending, (state) => {
                 state.status = 'loading';
                 state.error = null;
@@ -139,6 +143,8 @@ const todoSlice = createSlice({
                 state.status = 'rejected';
                 state.error = action.payload;
             })
+
+            // Переключение статуса задачи
             .addCase(fetchByToggleStatus.pending, (state) => {
                 state.status = 'loading';
                 state.error = null;
@@ -149,10 +155,24 @@ const todoSlice = createSlice({
             .addCase(fetchByToggleStatus.rejected, (state, action) => {
                 state.status = 'rejected';
                 state.error = action.payload;
+            })
+
+            // Добавление новой задачи
+            .addCase(fetchByAddNewTodo.pending, (state) => {
+                state.status = 'loading';
+                state.error = null;
+            })
+            .addCase(fetchByAddNewTodo.fulfilled, (state) => {
+                state.status = 'resolved';
+            })
+            .addCase(fetchByAddNewTodo.rejected, (state, action) => {
+                state.status = 'rejected';
+                state.error = action.payload;
             });
+
     },
 });
 
-export const { addTodo, toggleComplete, removeTodo } = todoSlice.actions;
+const { addTodo, toggleComplete, removeTodo } = todoSlice.actions;
 
 export default todoSlice.reducer;
